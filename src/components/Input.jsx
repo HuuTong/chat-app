@@ -26,8 +26,6 @@ const Input = () => {
              setErr(true)
             },
             () => {
-      
-              if(text) {
                 getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
                     await updateDoc(doc(db,"chats",data.chatId), {
                         messages: arrayUnion({
@@ -39,18 +37,6 @@ const Input = () => {
                         })
                     })
                   });
-              }else {
-                getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
-                    await updateDoc(doc(db,"chats",data.chatId), {
-                        messages: arrayUnion({
-                            id: uuid(),
-                            senderId: currentUser.uid,
-                            date: Timestamp.now(),
-                            img: downloadURL
-                        })
-                    })
-                  });
-              }
             }
           );
     }else {

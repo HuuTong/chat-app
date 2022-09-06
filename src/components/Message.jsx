@@ -43,7 +43,7 @@ const Message = ({ message }) => {
         <span>{covertTime()}</span>
       </div>
       <div className="messageContent" ref={ref}>
-        <p>{message.text}</p>
+        {message.text != "" && <p>{message.text}</p> }
         {message.img && <img src={message.img} alt="" />}
       </div>
     </div>
