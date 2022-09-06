@@ -26,17 +26,31 @@ const Input = () => {
              setErr(true)
             },
             () => {
-              getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
-                await updateDoc(doc(db,"chats",data.chatId), {
-                    messages: arrayUnion({
-                        id: uuid(),
-                        text,
-                        senderId: currentUser.uid,
-                        date: Timestamp.now(),
-                        img: downloadURL
+      
+              if(text) {
+                getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+                    await updateDoc(doc(db,"chats",data.chatId), {
+                        messages: arrayUnion({
+                            id: uuid(),
+                            text,
+                            senderId: currentUser.uid,
+                            date: Timestamp.now(),
+                            img: downloadURL
+                        })
                     })
-                })
-              });
+                  });
+              }else {
+                getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+                    await updateDoc(doc(db,"chats",data.chatId), {
+                        messages: arrayUnion({
+                            id: uuid(),
+                            senderId: currentUser.uid,
+                            date: Timestamp.now(),
+                            img: downloadURL
+                        })
+                    })
+                  });
+              }
             }
           );
     }else {
@@ -67,6 +81,11 @@ const Input = () => {
     setImg(null);
   };
 
+  const handleKey = (e) => {
+    console.log(e.code)
+    e.code === "Enter" && handleSend();
+  };
+
   return (
     <div className="input">
       <input
@@ -74,6 +93,7 @@ const Input = () => {
         placeholder="Type something..."
         onChange={(e) => setText(e.target.value)}
         value={text}
+        onKeyDown={handleKey}
       />
       <div className="send">
         <img src={Attach} alt="" />
